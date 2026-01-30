@@ -165,8 +165,8 @@ def asgi_to_wsgi(asgi_app):
 # WSGI APPLICATION
 # =============================================================================
 
-# Import the FastAPI app
-from app.main import app as fastapi_app
+# Import the WSGI-compatible FastAPI app (no async middleware)
+from app.main_wsgi import app as fastapi_app
 
 # Wrap FastAPI (ASGI) for WSGI compatibility
 application = asgi_to_wsgi(fastapi_app)
