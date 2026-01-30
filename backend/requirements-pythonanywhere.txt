@@ -1,4 +1,6 @@
-# SIRA Platform Backend Requirements
+# SIRA Platform - PythonAnywhere Production Requirements
+# Use this file for PythonAnywhere deployment:
+# pip install -r requirements-pythonanywhere.txt
 
 # Core Framework
 fastapi==0.109.0
@@ -7,9 +9,9 @@ python-multipart==0.0.6
 
 # Database
 sqlalchemy==2.0.25
-psycopg2-binary==2.9.9
+PyMySQL==1.1.0  # For MySQL
+psycopg2-binary==2.9.9  # For PostgreSQL
 alembic==1.13.1
-PyMySQL==1.1.0  # MySQL support for PythonAnywhere
 
 # ASGI support
 asgiref==3.7.2
@@ -36,28 +38,10 @@ aiosmtplib==3.0.1
 
 # PDF Generation
 reportlab==4.0.8
-weasyprint==60.2
-
-# Monitoring
-prometheus-client==0.19.0
-sentry-sdk[fastapi]==1.39.1
+# Note: weasyprint has complex system dependencies; use reportlab for basic PDF needs
 
 # Logging
 python-json-logger==2.0.7
 
 # HTTP Client
 httpx==0.26.0
-
-# Redis (for WebSocket scaling)
-redis==5.0.1
-
-# Testing
-pytest==7.4.4
-pytest-asyncio==0.23.3
-pytest-cov==4.1.0
-
-# Code Quality
-black==24.1.1
-flake8==7.0.0
-mypy==1.8.0
-isort==5.13.2
