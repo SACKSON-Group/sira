@@ -7,9 +7,10 @@ fastapi==0.109.0
 uvicorn[standard]==0.27.0
 python-multipart==0.0.6
 
-# Database (MySQL for PythonAnywhere)
+# Database
 sqlalchemy==2.0.25
-PyMySQL==1.1.0
+PyMySQL==1.1.0  # For MySQL
+psycopg2-binary==2.9.9  # For PostgreSQL
 alembic==1.13.1
 
 # ASGI support
