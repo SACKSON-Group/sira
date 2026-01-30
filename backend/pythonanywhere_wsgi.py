@@ -34,9 +34,10 @@ if venv_path not in sys.path:
 # ENVIRONMENT VARIABLES
 # =============================================================================
 
-# Database Configuration (MySQL on PythonAnywhere)
-# Format: mysql+pymysql://<username>$<dbname>:<password>@<username>.mysql.pythonanywhere-services.com/<username>$<dbname>
-os.environ['DATABASE_URL'] = f'mysql+pymysql://{PYTHONANYWHERE_USERNAME}$sira:<db_password>@{PYTHONANYWHERE_USERNAME}.mysql.pythonanywhere-services.com/{PYTHONANYWHERE_USERNAME}$sira'
+# Database Configuration
+# For PostgreSQL (paid accounts): postgresql+psycopg2://<username>$<dbname>:<password>@<username>-<id>.postgres.pythonanywhere-services.com:<port>/<dbname>
+# For MySQL (free/paid): mysql+pymysql://<username>$<dbname>:<password>@<username>.mysql.pythonanywhere-services.com/<username>$<dbname>
+os.environ['DATABASE_URL'] = 'postgresql+psycopg2://sackson$sira:YOUR_PASSWORD@sackson-5021.postgres.pythonanywhere-services.com:15021/sira_db'
 
 # Security Keys - IMPORTANT: Generate unique keys for production!
 # Generate with: python -c "import secrets; print(secrets.token_hex(32))"
