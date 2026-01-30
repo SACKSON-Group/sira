@@ -106,19 +106,25 @@ def asgi_to_wsgi(asgi_app):
         body = environ['wsgi.input'].read(content_length) if content_length > 0 else b''
 
         # Response storage
-        response_started = False
         response_status = None
         response_headers = []
         response_body = BytesIO()
 
+        # Track receive state - first call returns body, subsequent calls return disconnect
+        body_sent = False
+
         async def receive():
-            return {'type': 'http.request', 'body': body, 'more_body': False}
+            nonlocal body_sent
+            if not body_sent:
+                body_sent = True
+                return {'type': 'http.request', 'body': body, 'more_body': False}
+            # Subsequent calls (disconnect listeners) get disconnect message
+            return {'type': 'http.disconnect'}
 
         async def send(message):
-            nonlocal response_started, response_status, response_headers
+            nonlocal response_status, response_headers
 
             if message['type'] == 'http.response.start':
-                response_started = True
                 response_status = message['status']
                 response_headers = [
                     (name.decode() if isinstance(name, bytes) else name,
