@@ -15,17 +15,14 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy backend code
 COPY backend/ .
 
-# Set default env vars for setup
+# Set default env vars
 ENV DATABASE_URL=sqlite:///./sira_dev.db
 ENV SECRET_KEY=render-default-secret-key-change-via-env-vars
 ENV ALLOWED_ORIGINS=*
-
-# Setup database and seed data
-RUN python setup_dev.py
 
 # Render uses PORT env var (default 10000)
 ENV PORT=10000
 EXPOSE ${PORT}
 
-# Start server using shell form so $PORT is expanded
-CMD uvicorn app.main:app --host 0.0.0.0 --port $PORT
+# Seed database at startup, then start server
+CMD python setup_dev.py && uvicorn app.main:app --host 0.0.0.0 --port $PORT
