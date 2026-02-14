@@ -1,3 +1,9 @@
+databases:
+  - name: sira-db
+    plan: free
+    databaseName: sira
+    user: sira_user
+
 services:
   - type: web
     name: sira-api
@@ -5,7 +11,9 @@ services:
     plan: free
     envVars:
       - key: DATABASE_URL
-        value: sqlite:///./sira_dev.db
+        fromDatabase:
+          name: sira-db
+          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: ALGORITHM
@@ -13,7 +21,7 @@ services:
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: "120"
       - key: ALLOWED_ORIGINS
-        sync: false
+        value: "*"
       - key: DEBUG
         value: "False"
       - key: APP_VERSION

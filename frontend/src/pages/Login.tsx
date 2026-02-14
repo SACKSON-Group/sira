@@ -1,24 +1,33 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
+import { api } from '../services/api'
 import toast from 'react-hot-toast'
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [debugInfo, setDebugInfo] = useState('')
   const { login, isLoading, error, clearError } = useAuthStore()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     clearError()
+    setDebugInfo('')
+
+    const apiUrl = api.defaults.baseURL || window.location.origin
 
     try {
       await login(username, password)
       toast.success('Welcome to SIRA Platform!')
       navigate('/')
-    } catch (err) {
-      toast.error('Login failed. Please check your credentials.')
+    } catch (err: any) {
+      const detail = err?.response?.data?.detail || ''
+      const status = err?.response?.status || 'network error'
+      const msg = err?.message || 'Unknown'
+      setDebugInfo(`Target: ${apiUrl}/api/v1/auth/token | Status: ${status} | ${msg} | ${detail}`)
+      toast.error(`Login failed (${status})`)
     }
   }
 
@@ -77,6 +86,12 @@ export default function Login() {
                     <h3 className="text-sm font-medium text-danger-700">{error}</h3>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {debugInfo && (
+              <div className="rounded-md bg-gray-100 p-3">
+                <p className="text-xs font-mono text-gray-600 break-all">{debugInfo}</p>
               </div>
             )}
 
