@@ -1,13 +1,18 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios'
 import { useAuthStore } from '../stores/authStore'
 
-// Detect environment at runtime (not build time)
-const isLocal = typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+// Pure runtime detection — no build-time env vars that Vercel could override
+function getApiBaseUrl(): string {
+  if (typeof window === 'undefined') return ''
+  const { hostname } = window.location
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return '' // Uses Vite proxy in local dev
+  }
+  // All deployed environments call Render backend directly
+  return 'https://sira-7oeu.onrender.com'
+}
 
-// Local dev: empty string (uses Vite proxy). Deployed: call Render directly.
-const API_BASE_URL = import.meta.env.VITE_API_URL ||
-  (isLocal ? '' : 'https://sira-7oeu.onrender.com')
+const API_BASE_URL = getApiBaseUrl()
 
 export const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
