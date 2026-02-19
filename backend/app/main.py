@@ -64,9 +64,12 @@ async def lifespan(app: FastAPI):
     """Application lifespan events"""
     # Startup
     logger.info("Starting SIRA Platform API...")
-    init_db()
-    _ensure_admin_user()
-    logger.info("Database initialized")
+    try:
+        init_db()
+        _ensure_admin_user()
+        logger.info("Database initialized")
+    except Exception as e:
+        logger.error(f"Database initialization failed (app will start anyway): {e}")
     logger.info(f"SIRA Platform API v{settings.APP_VERSION} started successfully")
 
     yield
