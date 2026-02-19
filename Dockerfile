@@ -29,4 +29,5 @@ ENV PORT=8080
 EXPOSE ${PORT}
 
 # Start server - admin user is created in FastAPI lifespan
-CMD uvicorn app.main:app --host 0.0.0.0 --port $PORT
+# Use shell form explicitly so $PORT is expanded at runtime
+CMD ["/bin/sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
